@@ -32,9 +32,10 @@ export function AppSidebar() {
   ];
   return (
     <Sidebar>
-      <SidebarGroup />
-      <div className="text-black font-semibold pl-6 pt-[22px]">History</div>
-      {/*  */}
+      <SidebarHeader />
+      <SidebarContent className="mt-[60px]" />
+
+      <div className="text-black font-semibold pl-6 ">History</div>
       <SidebarGroupContent>
         <SidebarMenu className="px-4 ">
           {items.map((item) => (
@@ -48,10 +49,7 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
-      {/*  */}
-      <SidebarGroup />
-      <SidebarContent></SidebarContent>
-      <SidebarHeader />
+
       <SidebarFooter />
     </Sidebar>
   );

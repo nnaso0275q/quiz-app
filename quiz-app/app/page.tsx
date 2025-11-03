@@ -3,7 +3,9 @@ import { AdminLayout } from "./(protected)/AdminLayout";
 export default function Home() {
   return (
     <div>
-      <AdminLayout />
+      <AdminLayout>
+        <div></div>
+      </AdminLayout>
     </div>
   );
 }
