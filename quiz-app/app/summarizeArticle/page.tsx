@@ -10,12 +10,25 @@ export default function Page() {
   const title = searchParams.get("title") || "";
   const summary = searchParams.get("summary") || "";
 
-  const handleTakeQuiz = () => {
-    router.push(
-      `/quizzes?title=${encodeURIComponent(title)}&summary=${encodeURIComponent(
-        summary
-      )}`
-    );
+  const handleTakeQuiz = async (e: React.FormEvent) => {
+    try {
+      const response = await fetch("/api/quiz", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ summary, title }),
+      });
+      const data = await response.json();
+      router.push(
+        `/quizzes?title=${encodeURIComponent(
+          title
+        )}&articlePromt=${encodeURIComponent(summary)}`
+      );
+    } catch (error) {
+      console.log("Error:", error);
+      alert("failed image to text");
+    }
   };
 
   return (

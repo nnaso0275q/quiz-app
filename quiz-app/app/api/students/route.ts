@@ -1,17 +1,28 @@
-// import { query } from "@/lib/connectDB";
+// import { prisma } from "@/lib/prisma";
 // import { NextRequest } from "next/server";
 
 // export const GET = async () => {
-//   const Article = await query("SELECT * FROM students WHERE age > 18");
-//   return Response.json({ message: "success", data: Article });
+//   const students = await prisma.students.findMany({
+//     where: {
+//       age: {
+//         gt: 18,
+//         gte: 12,
+//         lt: 17,
+//         lte: 23,
+//       },
+//     },
+//   });
+//   return Response.json({ message: "success", data: students });
 // };
 
 // export const POST = async (request: NextRequest) => {
 //   const body = await request.json();
-//   const { title, content, summary } = body;
 
-//   const Article = await query(
-//     `INSERT INTO students(title, content, summary) VALUES (${title}, ${content}, ${summary})`
-//   );
-//   return Response.json({ message: "successfully added", data: Article });
+//   const newStudent = await prisma.students.create({
+//     data: {
+//       name: "",
+//       age: 1,
+//     },
+//   });
+//   return Response.json({ message: "successfully added", data: newStudent });
 // };

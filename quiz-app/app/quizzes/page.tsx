@@ -7,7 +7,6 @@ import Link from "next/link";
 
 export default function Page() {
   const searchParams = useSearchParams();
-  const title = searchParams.get("title") || "";
   const summary = searchParams.get("summary") || "";
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -73,7 +72,7 @@ export default function Page() {
 
         <div className="mt-6 w-[558px] border bg-white rounded-md h-fit p-6">
           {quizzes.length === 0 ? (
-            <div className="text-gray-500">Loading quiz questions...</div>
+            <div className="text-gray-500"> Quiz.......</div>
           ) : currentIndex < quizzes.length ? (
             <div>
               <div className="font-semibold text-lg mb-4">
