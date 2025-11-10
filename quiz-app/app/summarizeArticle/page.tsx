@@ -3,6 +3,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { AdminLayout } from "../(protected)/AdminLayout";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useState } from "react";
 export default function Page() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -10,7 +11,10 @@ export default function Page() {
   const title = searchParams.get("title") || "";
   const summary = searchParams.get("summary") || "";
 
+  const [loading, setLoading] = useState(false);
+
   const handleTakeQuiz = async (e: React.FormEvent) => {
+    setLoading(true);
     try {
       const response = await fetch("/api/quiz", {
         method: "POST",
@@ -20,10 +24,11 @@ export default function Page() {
         body: JSON.stringify({ summary, title }),
       });
       const data = await response.json();
+
       router.push(
         `/quizzes?title=${encodeURIComponent(
           title
-        )}&articlePromt=${encodeURIComponent(summary)}`
+        )}&summary=${encodeURIComponent(summary)}`
       );
     } catch (error) {
       console.log("Error:", error);
@@ -57,8 +62,13 @@ export default function Page() {
             See content
           </Button>
 
-          <Button className="h-10" type="submit" onClick={handleTakeQuiz}>
-            Take a quiz
+          <Button
+            className="h-10"
+            type="submit"
+            onClick={handleTakeQuiz}
+            disabled={loading || !summary}
+          >
+            {loading ? "Loading..." : " Take a quiz"}
           </Button>
         </div>
       </div>

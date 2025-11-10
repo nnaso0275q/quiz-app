@@ -12,10 +12,15 @@ export default function Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
+
   const [showNext, setShowNext] = useState(false);
 
   const [quizzes, setQuizzes] = useState<
     { question: string; options: string[]; correctAnswer: string }[]
+  >([]);
+
+  const [answer, setAnswer] = useState<
+    { question: string; userAnswer: string; correctAnswer: string }[]
   >([]);
 
   const currentQuiz = quizzes[currentIndex];
@@ -29,10 +34,19 @@ export default function Page() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ summary }),
         });
+
         const data = await res.json();
-        setQuizzes(data.quiz);
+        console.log("QUIZ API RESPONSE:", data);
+
+        if (Array.isArray(data.quiz)) {
+          setQuizzes(data.quiz);
+        } else {
+          console.error("Unexpected quiz format:", data);
+          setQuizzes([]);
+        }
       } catch (err) {
         console.error(err);
+        setQuizzes([]);
       }
     };
     fetchQuiz();
@@ -42,12 +56,25 @@ export default function Page() {
     setSelectedAnswer(option);
     setShowNext(true);
     if (option === currentQuiz.correctAnswer) setScore((prev) => prev + 1);
+
+    setAnswer((prev) => [
+      ...prev,
+      {
+        question: currentQuiz.question,
+        userAnswer: option,
+        correctAnswer: currentQuiz.correctAnswer,
+      },
+    ]);
   };
 
   const handleNextQuestion = () => {
     setSelectedAnswer(null);
     setShowNext(false);
     setCurrentIndex((prev) => prev + 1);
+  };
+
+  const restartQuiz = () => {
+    setScore(0);
   };
 
   return (
@@ -71,8 +98,8 @@ export default function Page() {
         </div>
 
         <div className="mt-6 w-[558px] border bg-white rounded-md h-fit p-6">
-          {quizzes.length === 0 ? (
-            <div className="text-gray-500"> Quiz.......</div>
+          {!quizzes || quizzes.length === 0 ? (
+            <div className="text-gray-500">Loading quiz.......</div>
           ) : currentIndex < quizzes.length ? (
             <div>
               <div className="font-semibold text-lg mb-4">
@@ -103,16 +130,36 @@ export default function Page() {
               )}
             </div>
           ) : (
-            <div className="text-2xl font-semibold p-7">
-              Your score: {score} / {quizzes.length}
-              <div className="mt-7">
-                {/*  */}
-                <div className="">
-                  {/* <div>{currentQuiz.question}</div>
-                  <div>{currentQuiz.options}</div>
-                  <div>{currentQuiz.correctAnswer}</div> */}
-                </div>
-                {/*  */}
+            <div className=" p-7">
+              <div className="text-2xl font-semibold flex items-center gap-1">
+                Your score: {score}
+                <span className="font-medium text-base text-muted-foreground">
+                  / {quizzes.length}
+                </span>
+              </div>
+
+              <div className="mt-7 space-y-5">
+                {answer.map((a, i) => (
+                  <div key={i} className="border p-3 rounded-md">
+                    <div className="text-muted-foreground font-medium text-xs">
+                      {i + 1}. {a.question}
+                    </div>
+                    <div
+                      className={`mt-1 ${
+                        a.userAnswer === a.correctAnswer
+                          ? "text-green-500 text-xs font-medium"
+                          : "text-red-500 font-medium text-xs "
+                      }`}
+                    >
+                      Your answer: {a.userAnswer}
+                    </div>
+                    {a.userAnswer !== a.correctAnswer && (
+                      <div className="text-green-500 text-xs font-medium">
+                        Correct: {a.correctAnswer}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
               <div className="mt-7 justify-between flex">
                 <Link href="/summarizeArticle">

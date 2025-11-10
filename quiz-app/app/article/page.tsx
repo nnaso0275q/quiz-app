@@ -95,8 +95,7 @@ export default function Page() {
               type="submit"
               disabled={loading || !articlePromt}
             >
-              {loading ? "Generate summary" : "Generate summary"}
-              Generate summary
+              {loading ? "Loading..." : "Generate summary"}
             </Button>
           </div>
         </div>

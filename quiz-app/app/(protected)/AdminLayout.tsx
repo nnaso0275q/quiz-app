@@ -1,3 +1,4 @@
+"use client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/(protected)/AppSidebar";
 import Header from "./Header";
