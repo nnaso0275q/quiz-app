@@ -2,9 +2,18 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Page() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const summary = searchParams.get("summary") || "";
 
@@ -82,9 +91,38 @@ export default function Page() {
           </div>
 
           {/*  */}
-          <div className="w-12 h-10 border rounded-md flex items-center justify-center">
-            <img className="px-4 py-3" src="/x.svg" alt="close" />
-          </div>
+
+          <Dialog>
+            <DialogTrigger>
+              <div className="w-12 h-10 border rounded-md flex items-center justify-center hover:bg-gray-100">
+                <img className="px-4 py-3" src="/x.svg" alt="close" />
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader className="p-6 w-[450px] h-fit">
+                <DialogTitle>Are you sure?</DialogTitle>
+                <DialogDescription className="mt-1.5 text-[#B91C1C] leading-5 text-sm font-normal">
+                  If you press 'Cancel', this quiz will restart from the
+                  beginning.
+                  <div className="mt-7 justify-between flex">
+                    <Button
+                      className="flex items-center w-[179px] hover:bg-gray-300 hover:text-black"
+                      // onClick={() => router.back()}
+                    >
+                      Go back
+                    </Button>
+                    <Button
+                      className="bg-white text-black border w-[179px] hover:bg-gray-300"
+                      onClick={() => router.back()}
+                    >
+                      Cancel quiz
+                    </Button>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
           {/*  */}
         </div>
 
@@ -157,12 +195,14 @@ export default function Page() {
                 ))}
               </div>
               <div className="mt-7 justify-between flex">
-                <Link href="/summarizeArticle">
-                  <Button className="bg-white text-black border flex items-center">
-                    <img src="/reload.svg"></img>
-                    Restart quiz
-                  </Button>
-                </Link>
+                <Button
+                  className="bg-white text-black border flex items-center"
+                  onClick={() => router.back()}
+                >
+                  <img src="/reload.svg"></img>
+                  Restart quiz
+                </Button>
+
                 <Button className="flex items-center">
                   <img src="/bookmark.svg"></img>
                   Save and leave

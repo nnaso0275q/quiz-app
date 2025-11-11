@@ -1,8 +1,8 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useState } from "react";
+import { ChevronLeft } from "lucide-react";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -45,29 +45,15 @@ export default function Page() {
         articlePromt
       )}`
     );
-
-    // const summarize = JSON.parse(localStorage.getItems("summary") ("setArticlePromt") || "[]");
-    // localStorage.setItem("summary", "setArticlePromt", JSON.stringify([]));
-
-    // router.push(
-    //   `/histoy?title=${encodeURIComponent(
-    //     title
-    //   )}&summary=${encodeURIComponent(summary)}`
-    // );
   };
 
   return (
     <>
-      <Link
-        href="/"
-        // href={`/article?title=${encodeURIComponent(
-        //   title
-        // )}&summary=${encodeURIComponent(summary)}`}
-      >
-        <div className="w-12 h-10 border rounded-md ml-20 mt-12">
-          <img className="mx-auto py-3" src="/chevron.svg" alt="back" />
-        </div>
-      </Link>
+      <ChevronLeft
+        className="w-12 h-10 border rounded-md ml-20 mt-12 hover:bg-gray-100"
+        onClick={() => router.back()}
+      />
+
       <div className="w-[856px] h-fit bg-white border rounded-xl mt-6 ml-20 p-7">
         <div className="flex items-center gap-2">
           <img src="/Article.svg" alt="article" />

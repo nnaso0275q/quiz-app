@@ -1,10 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function History() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const title = searchParams.get("title") || "";
   const summary = searchParams.get("summary") || "";
@@ -19,13 +22,10 @@ export default function History() {
 
   return (
     <>
-      {/* href={`/article?title=${encodeURIComponent(
-          title
-        )}&summary=${encodeURIComponent(summary)}`} */}
-
-      <div className="w-12 h-10 border rounded-md ml-20 mt-12">
-        <img className="mx-auto py-3" src="/chevron.svg" alt="back" />
-      </div>
+      <ChevronLeft
+        className="w-12 h-10 border rounded-md ml-20 mt-12 hover:bg-gray-100"
+        onClick={() => router.back()}
+      />
 
       <div className="w-[856px] h-fit bg-white border rounded-xl mt-6 ml-20 p-7">
         <div className="flex items-center gap-2">
