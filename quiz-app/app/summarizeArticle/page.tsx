@@ -1,19 +1,21 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { AdminLayout } from "../(protected)/AdminLayout";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
+
 export default function Page() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const title = searchParams.get("title") || "";
   const summary = searchParams.get("summary") || "";
+  const articlePromt = searchParams.get("articlePromt") || "";
 
   const [loading, setLoading] = useState(false);
 
   const handleTakeQuiz = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     try {
       const response = await fetch("/api/quiz", {
@@ -36,9 +38,32 @@ export default function Page() {
     }
   };
 
+  const history = async () => {
+    router.push(
+      `/history?title=${encodeURIComponent(title)}
+      &summary=${encodeURIComponent(summary)}&articlePromt=${encodeURIComponent(
+        articlePromt
+      )}`
+    );
+
+    // const summarize = JSON.parse(localStorage.getItems("summary") ("setArticlePromt") || "[]");
+    // localStorage.setItem("summary", "setArticlePromt", JSON.stringify([]));
+
+    // router.push(
+    //   `/histoy?title=${encodeURIComponent(
+    //     title
+    //   )}&summary=${encodeURIComponent(summary)}`
+    // );
+  };
+
   return (
-    <AdminLayout>
-      <Link href="/article">
+    <>
+      <Link
+        href="/"
+        // href={`/article?title=${encodeURIComponent(
+        //   title
+        // )}&summary=${encodeURIComponent(summary)}`}
+      >
         <div className="w-12 h-10 border rounded-md ml-20 mt-12">
           <img className="mx-auto py-3" src="/chevron.svg" alt="back" />
         </div>
@@ -58,7 +83,11 @@ export default function Page() {
         <div className="font-normal text-sm mt-2">{summary}</div>
 
         <div className="flex items-center justify-between mt-5">
-          <Button className="h-10 bg-white border text-black" type="submit">
+          <Button
+            className="h-10 bg-white border text-black"
+            type="submit"
+            onClick={history}
+          >
             See content
           </Button>
 
@@ -72,6 +101,6 @@ export default function Page() {
           </Button>
         </div>
       </div>
-    </AdminLayout>
+    </>
   );
 }

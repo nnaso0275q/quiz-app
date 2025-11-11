@@ -3,7 +3,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ArticleType } from "@/types";
+
 export default function Page() {
   const [title, setTitle] = useState<string>("");
   const [articlePromt, setArticlePromt] = useState<string>("");
@@ -20,21 +22,30 @@ export default function Page() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ articlePromt, summary, title }),
+        body: JSON.stringify({ articlePromt }),
       });
       const data = await response.json();
-      setSummary(data.message);
-      router.push(
-        `/summarizeArticle?title=${encodeURIComponent(
-          title
-        )}&summary=${encodeURIComponent(data.message)}`
-      );
+
       if (data.message) {
-        setSummary(data.message);
-        console.log("setSummary", setSummary);
-      } else {
-        alert("Failed image to text");
+        const newArticle: ArticleType = { id: Date.now(), title };
+
+        const existing = JSON.parse(localStorage.getItem("articles") || "[]");
+
+        localStorage.setItem("articlePromt", JSON.stringify(articlePromt));
+
+        localStorage.setItem(
+          "articles",
+          JSON.stringify([...existing, newArticle])
+        );
+        router.push(
+          `/summarizeArticle?title=${encodeURIComponent(
+            newArticle.title
+          )}&summary=${encodeURIComponent(
+            data.message
+          )}&articlePromt=${encodeURIComponent(articlePromt)}`
+        );
       }
+      setSummary(data.message);
     } catch (error) {
       console.log("Error:", error);
       alert("failed image to text");

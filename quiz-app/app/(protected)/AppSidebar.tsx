@@ -8,19 +8,44 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ItemsType } from "@/types";
 
-export function AppSidebar() {
-  const items = [
-    "Genghis Khan",
-    "Figma ашиглах заавар",
-    "Санхүүгийн шийдвэрүүд",
-    "Figma-д загвар зохион бүтээх аргачлалууд",
-    "Санхүүгийн технологи 2023",
-    "Хэрэглэгчийн интерфейс дизайны шилдэг туршлага",
-    "Архитектур загварчлалын хөтөлбөрүүд",
-    "Эрүүл амьдралын хэв маяг",
-    "Технологийн салбарт хийгдэж буй инноваци",
-  ];
+type Props = {
+  open: boolean;
+};
+export function AppSidebar({ open }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+  const [items, setItems] = useState<ItemsType[]>([]);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  // const items = [
+  //   "Genghis Khan",
+  //   "Figma ашиглах заавар",
+  //   "Санхүүгийн шийдвэрүүд",
+  //   "Figma-д загвар зохион бүтээх аргачлалууд",
+  //   "Санхүүгийн технологи 2023",
+  //   "Хэрэглэгчийн интерфейс дизайны шилдэг туршлага",
+  //   "Архитектур загварчлалын хөтөлбөрүүд",
+  //   "Эрүүл амьдралын хэв маяг",
+  //   "Технологийн салбарт хийгдэж буй инноваци",
+  // ];
+
+  useEffect(() => {
+    const saved = localStorage.getItem("articles");
+    if (saved) setItems(JSON.parse(saved));
+  }, []);
+
+  const handleSelectedItem = (id: number) => {
+    setSelectedId(id);
+    router.push(`article?id=${id}`);
+  };
+  const selectedItems = items.find((item) => item.id === Number(id));
+
   return (
     <Sidebar>
       <SidebarHeader />
@@ -29,15 +54,25 @@ export function AppSidebar() {
       <div className="text-black font-semibold pl-6 ">History</div>
       <SidebarGroupContent>
         <SidebarMenu className="px-4 ">
-          {items.map((item) => (
-            <SidebarMenuItem key={item}>
-              <SidebarMenuButton asChild>
-                <span className="text-black font-medium h-fit py-2 text-base">
-                  {item}
-                </span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {items?.map((item) => {
+            return (
+              <SidebarMenuItem key={item.id}>
+                <SidebarMenuButton
+                  asChild
+                  onClick={() => handleSelectedItem(item.id)}
+                  className={`cursor-pointer ${
+                    selectedItems?.id === item.id
+                      ? "bg-gray-100 font-semibold"
+                      : ""
+                  }`}
+                >
+                  <div className="cursor-default text-black font-medium h-fit py-2 text-base">
+                    {item.title}
+                  </div>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarGroupContent>
 

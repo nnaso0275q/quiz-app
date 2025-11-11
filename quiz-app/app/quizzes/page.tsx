@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { AdminLayout } from "../(protected)/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -73,12 +72,8 @@ export default function Page() {
     setCurrentIndex((prev) => prev + 1);
   };
 
-  const restartQuiz = () => {
-    setScore(0);
-  };
-
   return (
-    <AdminLayout>
+    <>
       <div className="mx-50 my-[120px]">
         <div className="flex items-center w-[558px] justify-between">
           <div className="flex items-center gap-2 ">
@@ -177,6 +172,6 @@ export default function Page() {
           )}
         </div>
       </div>
-    </AdminLayout>
+    </>
   );
 }
