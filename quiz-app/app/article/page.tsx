@@ -3,9 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ArticleType } from "@/types";
-import { ChevronLeft } from "lucide-react";
 
 export default function Page() {
   const [title, setTitle] = useState<string>("");
@@ -49,7 +48,7 @@ export default function Page() {
       setSummary(data.message);
     } catch (error) {
       console.log("Error:", error);
-      alert("failed image to text");
+      alert("failed");
     }
   };
   return (

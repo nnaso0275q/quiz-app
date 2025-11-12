@@ -5,7 +5,9 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: NextRequest) {
   const { summary } = await req.json();
-
+  console.log("==========================");
+  console.log("Quiziin backendiin summary", summary);
+  console.log("==========================");
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: summary,
@@ -19,7 +21,6 @@ export async function POST(req: NextRequest) {
 `,
     },
   });
-
   const quizJson =
     response?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 
@@ -47,6 +48,15 @@ export async function POST(req: NextRequest) {
     console.log("Cleaned AI response:", quizJson);
     return NextResponse.json({ quiz: [] });
   }
+
+  //   const articles = await prisma.articles.create({
+  //   data: {
+  //     title: title,
+  //     // content: articlePromt,
+  //     summery: summary,
+  //   },
+  //   //  return NextResponse.json({ message: "ARTICLESSSS", data: articles });
+  // });
 
   return NextResponse.json({ quiz: quizArray });
 }

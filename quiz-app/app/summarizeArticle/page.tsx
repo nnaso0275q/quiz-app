@@ -34,7 +34,7 @@ export default function Page() {
       );
     } catch (error) {
       console.log("Error:", error);
-      alert("failed image to text");
+      alert("failed");
     }
   };
 

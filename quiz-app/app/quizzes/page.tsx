@@ -3,14 +3,18 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Page() {
   const router = useRouter();
@@ -91,38 +95,35 @@ export default function Page() {
           </div>
 
           {/*  */}
-
-          <Dialog>
-            <DialogTrigger>
+          <AlertDialog>
+            <AlertDialogTrigger>
               <div className="w-12 h-10 border rounded-md flex items-center justify-center hover:bg-gray-100">
                 <img className="px-4 py-3" src="/x.svg" alt="close" />
               </div>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader className="p-6 w-[450px] h-fit">
-                <DialogTitle>Are you sure?</DialogTitle>
-                <DialogDescription className="mt-1.5 text-[#B91C1C] leading-5 text-sm font-normal">
+            </AlertDialogTrigger>
+            <AlertDialogContent className="p-6 w-[450px] h-fit">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="font-semibold text-2xl">
+                  Are yous sure?
+                </AlertDialogTitle>
+                <AlertDialogDescription className="mt-1.5 text-[#B91C1C] leading-5 text-sm font-normal">
                   If you press 'Cancel', this quiz will restart from the
                   beginning.
-                  <div className="mt-7 justify-between flex">
-                    <Button
-                      className="flex items-center w-[179px] hover:bg-gray-300 hover:text-black"
-                      // onClick={() => router.back()}
-                    >
-                      Go back
-                    </Button>
-                    <Button
-                      className="bg-white text-black border w-[179px] hover:bg-gray-300"
-                      onClick={() => router.back()}
-                    >
-                      Cancel quiz
-                    </Button>
-                  </div>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="mt-6 justify-between">
+                <AlertDialogCancel
+                  className="w-[179px] bg-black text-white hover:bg-gray-300 hover:text-black"
+                  // onClick={() => router.back()}
+                >
+                  Go back
+                </AlertDialogCancel>
+                <AlertDialogAction className="bg-white text-black border w-[179px] hover:bg-gray-300">
+                  Cancel quiz
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           {/*  */}
         </div>
 
